@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "..\\twiter-react-2021"
 		}
 	],
 	"settings": {}

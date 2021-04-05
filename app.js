@@ -3,28 +3,36 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-require('dotenv').config();
 
 var indexRouter = require('./routes/index');
 var postsRouter = require('./routes/posts');
 
-var app = express();
+var bodyParser  = require("body-parser");   //nuevo
+var cors = require('cors');   //nuevo
 
-//Conexion con base de datos mongo
+require('dotenv').config();
+
 var mongoose = require('mongoose');
+mongoose.set('useCreateIndex', true);
 
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true })
     .then(() =>  console.log('mymerndb connection successful'))
     .catch((err) => console.error(err));
-    mongoose.set('useCreateIndex', true);
+
+var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+//app.use(express.json());
+//app.use(express.urlencoded({ extended: false }));
+
+app.use(cors());  //nuevo
+app.use(bodyParser.json({limit: '50mb'}));  //nuevo
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));   //nuevo
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
